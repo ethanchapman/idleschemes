@@ -1,0 +1,44 @@
+﻿@page "/regions"
+@inherits BaseAdminComponent<RegionsViewModel>
+@layout MainLayout
+
+<PageTitle>Regions</PageTitle>
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time Zone</th>
+                    <th scope="col">Is Public</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var region in ViewModel.PageList) {
+                    <tr>
+                        <td>@region.Id</td>
+                        <td>@region.Name</td>
+                        <td>@region.TimeZone</td>
+                        <td>
+                            <button type="button" class="btn @(region.IsPublic ? "btn-primary" : "btn-secondary") btn-sm" @onclick="() => ViewModel.ToggleIsPublicAsync(region)">
+                                <i class="bi @(region.IsPublic ? "bi-eye-fill" : "bi-eye-slash-fill")"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

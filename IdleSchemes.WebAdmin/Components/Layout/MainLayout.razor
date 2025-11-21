@@ -1,0 +1,58 @@
+﻿@using IdleSchemes.Data.Models
+@inherits LayoutComponentBase
+@inject UserSessionService UserSessionService
+@inject IHttpContextAccessor IHttpContextAccessor
+
+<div class="h-100 d-flex flex-column justify-content-center">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IdleSchemes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">@(UserSession?.ActiveAssociation?.Organization.Name ?? "")</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    @(User?.Name ?? "")
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid h-100 flex-grow-1">
+        <div class="row h-100">
+            <div class="col col-md-3 lg-2 side-menu">
+                <NavMenu UserSession="@UserSession" />
+            </div>
+            <div class="col">
+                @Body
+            </div>
+        </div>
+    </div>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <span class="navbar-text">
+                IdleSchemes @DateTime.Now.Year
+            </span>
+        </div>
+    </nav>
+</div>
+
+@code {
+
+    public UserSession? UserSession { get; set; }
+    public User? User => UserSession?.User;
+
+    protected override void OnInitialized() {
+        UserSessionService.CurrentSessionUpdated += CurrentSessionUpdated;
+    }
+
+    private void CurrentSessionUpdated(object? source, EventArgs args) {
+        UserSession = UserSessionService.CurrentSession;
+        StateHasChanged();
+    }
+
+}

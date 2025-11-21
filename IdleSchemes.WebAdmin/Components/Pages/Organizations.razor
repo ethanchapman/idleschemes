@@ -1,0 +1,40 @@
+﻿@page "/orgs"
+@inherits BaseAdminComponent<OrganizationsViewModel>
+@layout MainLayout
+
+<PageTitle>Organizations</PageTitle>
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var org in ViewModel.PageList) {
+                    <tr>
+                        <td>@org.Id</td>
+                        <td>@org.Name</td>
+                        <td>@(org.Region?.Name ?? "-")</td>
+                        <td>@org.Created.ToString("yyyy/MM/dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

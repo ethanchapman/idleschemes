@@ -1,0 +1,42 @@
+﻿@page "/tickets"
+@inherits BaseAdminComponent<TicketsViewModel>
+@layout MainLayout
+
+<PageTitle>Organizations</PageTitle>
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">By</th>
+                    <th scope="col">Tickets</th>
+                    <th scope="col">Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registration in ViewModel.PageList) {
+                    <tr>
+                        <td>@registration.Registration.Id</td>
+                        <td>@registration.Registration.Instance.Info.Name</td>
+                        <td>@registration.Registration.User.Name</td>
+                        <td>@registration.Registration.Tickets.Count</td>
+                        <td>@registration.Confirmed</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

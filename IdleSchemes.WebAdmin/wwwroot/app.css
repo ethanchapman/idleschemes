@@ -1,0 +1,29 @@
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.bg-login {
+    background-color: #eee;
+}
+
+.side-menu {
+    background: #ddd;
+}
+
+.side-menu li{
+    margin: 1em 0 0 1em;
+}
+
+.side-menu a, .side-menu a:visited, .side-menu a:active {
+    color: #333;
+    text-decoration: none;
+}
+
+.side-menu a:hover {
+    color: #444;
+    text-decoration: none;
+}

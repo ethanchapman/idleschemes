@@ -1,0 +1,46 @@
+﻿@page "/events"
+@inherits BaseAdminComponent<EventsViewModel>
+@layout MainLayout
+
+<PageTitle>Events</PageTitle>
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+    <div class="col text-end">
+        <div class="btn-group">
+            <button type="button" class="btn @(ViewModel.EventFilter == EventsViewModel.EventFilterOption.Upcoming ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetEventFilterAsync(EventsViewModel.EventFilterOption.Upcoming)">Upcoming</button>
+            <button type="button" class="btn @(ViewModel.EventFilter == EventsViewModel.EventFilterOption.Past ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetEventFilterAsync(EventsViewModel.EventFilterOption.Past)">Past</button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Starts</th>
+                    <th scope="col">Ends</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evt in ViewModel.PageList) {
+                    <tr>
+                        <td>@evt.Instance.Id</td>
+                        <td>@evt.Instance.Info.Name</td>
+                        <td>@evt.Starts</td>
+                        <td>@evt.Ends</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

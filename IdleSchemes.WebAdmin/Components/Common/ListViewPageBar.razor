@@ -1,0 +1,21 @@
+﻿@code {
+	[Parameter]
+	public IListViewModel ViewModel { get; set; }
+}
+<ul class="pagination justify-content-center">
+    @if (ViewModel.ShowFirst) {
+        <li class="page-item"><button class="page-link" @onclick="() => ViewModel.GoToPageAsync(1)">First</button></li>
+    }
+    @foreach (var leftPage in ViewModel.LeftPages) {
+        <li class="page-item"><button class="page-link" @onclick="() => ViewModel.GoToPageAsync(leftPage)">@leftPage</button></li>
+    }
+    <li class="page-item active">
+        <button class="page-link">@ViewModel.CurrentPage</button>
+    </li>
+    @foreach (var rightPage in ViewModel.RightPages) {
+        <li class="page-item"><button class="page-link" @onclick="() => ViewModel.GoToPageAsync(rightPage)">@rightPage</button></li>
+    }
+    @if (ViewModel.ShowLast) {
+        <li class="page-item"><button class="page-link" @onclick="() => ViewModel.GoToPageAsync(ViewModel.TotalPages)">Last</button></li>
+    }
+</ul>

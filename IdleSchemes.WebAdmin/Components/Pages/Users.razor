@@ -1,0 +1,55 @@
+﻿@page "/users"
+@inherits BaseAdminComponent<UsersViewModel>
+@layout MainLayout
+
+<PageTitle>Users</PageTitle>
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in ViewModel.PageList) {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>
+                            @(user.Email ?? "-")
+                            @if(user.EmailVerified is not null) {
+                                <i class="bi bi-check"></i>
+                            }
+                        </td>
+                        <td>
+                            @(user.Phone ?? "-")
+                            @if (user.PhoneVerified is not null) {
+                                <i class="bi bi-check"></i>
+                            }
+                        </td>
+                        <td>@(user.Region?.Name ?? "-")</td>
+                        <td>@user.Created.ToString("yyyy/MM/dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+
+

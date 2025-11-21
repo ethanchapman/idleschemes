@@ -1,0 +1,115 @@
+﻿@using IdleSchemes.Data.Models
+@inject UserSessionService UserSessionService
+
+<ul class="list-unstyled">
+    <li>
+        <a href="/">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+    </li>
+    @if (User?.IsModerator ?? false) {
+        <li>
+            <a href="#">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Moderation
+            </a>
+        </li>
+    }
+</ul>
+@if(UserSession?.ActiveAssociation is not null) {
+    <hr />
+    <ul class="list-unstyled">
+        <li>
+            <a href="/events">
+                <i class="bi bi-calendar-week-fill"></i>
+                Events
+            </a>
+        </li>
+        <li>
+            <a href="/templates">
+                <i class="bi bi-calendar2-fill"></i>
+                Event Templates
+            </a>
+        </li>
+        <li>
+            <a href="/tickets">
+                <i class="bi bi-ticket-detailed-fill"></i>
+                Tickets
+            </a>
+        </li>
+        <li>
+            <a href="/reviews">
+                <i class="bi bi-chat-heart-fill"></i>
+                Reviews
+            </a>
+        </li>
+        <li>
+            <a href="/associates">
+                <i class="bi bi-person-badge-fill"></i>
+                Associates
+            </a>
+        </li>
+        <li>
+            <a href="/income">
+                <i class="bi bi-cash-stack"></i>
+                Income
+            </a>
+        </li>
+        <li>
+            <a href="/settings">
+                <i class="bi bi-building-fill-gear"></i>
+                Settings
+            </a>
+        </li>
+    </ul>
+}
+@if (User?.IsAdministrator ?? false) {
+    <hr />
+    <ul class="list-unstyled">
+        <li>
+            <a href="/regions">
+                <i class="bi bi-pin-map-fill"></i>
+                Regions
+            </a>
+        </li>
+        <li>
+            <a href="/users">
+                <i class="bi bi-people-fill"></i>
+                Users
+            </a>
+        </li>
+        <li>
+            <a href="/orgs">
+                <i class="bi bi-buildings-fill"></i>
+                Organizations
+            </a>
+        </li>
+    </ul>
+    <hr />
+    <ul class="list-unstyled">
+        <li>
+            <a href="#">
+                <i class="bi bi-graph-up"></i>
+                Reports
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-list-columns-reverse"></i>
+                Logs
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-terminal-fill"></i>
+                Utilities
+            </a>
+        </li>
+    </ul>
+}
+@code {
+    [Parameter]
+    public UserSession? UserSession { get; set; }
+    public User? User => UserSession?.User;
+}
