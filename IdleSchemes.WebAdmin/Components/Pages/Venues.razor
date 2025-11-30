@@ -1,5 +1,5 @@
-﻿@page "/orgs"
-@inherits BaseAdminComponent<OrganizationsViewModel>
+﻿@page "/venues"
+@inherits BaseAdminComponent<VenuesViewModel>
 @layout MainLayout
 
 <PageTitle>@ViewModel.Title</PageTitle>
@@ -14,19 +14,17 @@
         <table class="table table-sm mt-2">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">Id</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Region</th>
-                    <th scope="col">Created</th>
+                    <th scope="col">Parent</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var org in ViewModel.PageList) {
+                @foreach (var venue in ViewModel.PageList) {
                     <tr>
-                        <td>@org.Id</td>
-                        <td>@org.Name</td>
-                        <td>@(org.Region?.Name ?? "-")</td>
-                        <td>@org.Created.ToString("yyyy/MM/dd")</td>
+                        <td>@venue.Id</td>
+                        <td>@venue.Name</td>
+                        <td>@venue.Parent?.Name</td>
                     </tr>
                 }
             </tbody>

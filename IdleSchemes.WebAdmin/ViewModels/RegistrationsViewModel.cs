@@ -4,15 +4,15 @@ using IdleSchemes.Data.Models.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleSchemes.WebAdmin.ViewModels {
-    public class TicketsViewModel : ListViewModel<TicketsViewModel.RegistrationInfo> {
+    public class RegistrationsViewModel : ListViewModel<RegistrationsViewModel.RegistrationInfo> {
 
         private readonly IdleDbContext _dbContext;
 
-        public TicketsViewModel(IdleDbContext dbContext) {
+        public RegistrationsViewModel(IdleDbContext dbContext) {
             _dbContext = dbContext;
         }
 
-        public string Title { get; } = "Tickets";
+        public string Title { get; } = "Registrations";
 
         protected override Task<int> CountAllAsync() {
             return _dbContext.Registrations
@@ -35,8 +35,8 @@ namespace IdleSchemes.WebAdmin.ViewModels {
         }
 
         public class RegistrationInfo {
-            private readonly TicketsViewModel _viewModel;
-            public RegistrationInfo(Registration registration, TicketsViewModel viewModel) {
+            private readonly RegistrationsViewModel _viewModel;
+            public RegistrationInfo(Registration registration, RegistrationsViewModel viewModel) {
                 Registration = registration;
                 _viewModel = viewModel;
             }

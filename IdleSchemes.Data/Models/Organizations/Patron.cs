@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using IdleSchemes.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleSchemes.Data.Models.Organizations {
@@ -9,7 +8,7 @@ namespace IdleSchemes.Data.Models.Organizations {
         public required User User { get; init; }
         [Column("OrganizationId")]
         public required Organization Organization { get; init; }
-        public bool AllowMarketing { get; set; }
+        public bool AllowEmail { get; set; }
         public required DateTime Since { get; init; }
     }
 }

@@ -1,8 +1,9 @@
-﻿@page "/tickets"
-@inherits BaseAdminComponent<TicketsViewModel>
+﻿@page "/registrations"
+@inherits BaseAdminComponent<RegistrationsViewModel>
 @layout MainLayout
 
-<PageTitle>Organizations</PageTitle>
+<PageTitle>@ViewModel.Title</PageTitle>
+
 <div class="row mt-2">
     <div class="col">
         <h1>@ViewModel.Title</h1>

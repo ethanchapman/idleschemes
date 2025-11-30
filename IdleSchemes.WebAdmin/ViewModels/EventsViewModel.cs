@@ -5,7 +5,7 @@ using IdleSchemes.Data.Models.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleSchemes.WebAdmin.ViewModels {
-    public class EventsViewModel : ListViewModel<EventsViewModel.EventInfo> {
+    public class EventsViewModel : ListViewModel<EventsViewModel.EventRow> {
 
         private readonly IdleDbContext _dbContext;
         private readonly TimeService _timeService;
@@ -28,13 +28,13 @@ namespace IdleSchemes.WebAdmin.ViewModels {
         }
 
 
-        protected override async Task<List<EventInfo>> FetchPageAsync(int skip) {
+        protected override async Task<List<EventRow>> FetchPageAsync(int skip) {
             var dbResults = await GetQuery()
                 .OrderBy(e => e.FirstSessionStarts)
                 .Skip(skip)
                 .ToListAsync();
             return dbResults
-                .Select(e => new EventInfo(e, this))
+                .Select(e => new EventRow(e, this))
                 .ToList();
         }
 
@@ -54,9 +54,9 @@ namespace IdleSchemes.WebAdmin.ViewModels {
             Past
         }
 
-        public class EventInfo {
+        public class EventRow {
             private readonly EventsViewModel _viewModel;
-            public EventInfo(EventInstance eventInstance, EventsViewModel viewModel) {
+            public EventRow(EventInstance eventInstance, EventsViewModel viewModel) {
                 Instance = eventInstance;
                 _viewModel = viewModel;
             }

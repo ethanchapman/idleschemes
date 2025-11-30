@@ -1,5 +1,5 @@
-﻿@page "/orgs"
-@inherits BaseAdminComponent<OrganizationsViewModel>
+﻿@page "/patrons"
+@inherits BaseAdminComponent<PatronsViewModel>
 @layout MainLayout
 
 <PageTitle>@ViewModel.Title</PageTitle>
@@ -14,19 +14,19 @@
         <table class="table table-sm mt-2">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Region</th>
-                    <th scope="col">Created</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Since</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var org in ViewModel.PageList) {
+                @foreach (var patron in ViewModel.PageList) {
                     <tr>
-                        <td>@org.Id</td>
-                        <td>@org.Name</td>
-                        <td>@(org.Region?.Name ?? "-")</td>
-                        <td>@org.Created.ToString("yyyy/MM/dd")</td>
+                        <td>@patron.Instance.User.Name</td>
+                        <td>@patron.Email</td>
+                        <td>@patron.Instance.User.Phone</td>
+                        <td>@patron.Since</td>
                     </tr>
                 }
             </tbody>
