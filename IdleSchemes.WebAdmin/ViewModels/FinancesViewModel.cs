@@ -50,7 +50,7 @@ namespace IdleSchemes.WebAdmin.ViewModels {
                     && r.Confirmed > CurrentSession!.ActiveAssociation!.Organization.LastPayout && r.Cost > 0 && r.Instance.CancellationDeadline < _now);
             } else if (FinanceFilter == FinanceFilterOption.Pending) {
                 return _dbContext.Registrations.Where(r => r.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization
-                    && r.Confirmed > CurrentSession!.ActiveAssociation!.Organization.LastPayout && r.Cost > 0 && r.Instance.CancellationDeadline < _now);
+                    && r.Confirmed > CurrentSession!.ActiveAssociation!.Organization.LastPayout && r.Cost > 0 && r.Instance.CancellationDeadline > _now);
             } else {
                 return _dbContext.Registrations.Where(r => r.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization
                     && r.Confirmed != null && r.Cost > 0);
