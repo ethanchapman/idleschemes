@@ -2,10 +2,9 @@
 using IdleSchemes.Data;
 using IdleSchemes.Data.Models.Organizations;
 using Microsoft.EntityFrameworkCore;
-using static IdleSchemes.WebAdmin.ViewModels.PatronsViewModel;
 
 namespace IdleSchemes.WebAdmin.ViewModels {
-    public class PatronsViewModel : ListViewModel<PatronRow> {
+    public class PatronsViewModel : ListViewModel<PatronsViewModel.PatronRow> {
 
         private readonly IdleDbContext _dbContext;
 
@@ -42,7 +41,7 @@ namespace IdleSchemes.WebAdmin.ViewModels {
             }
             public Patron Instance { get; }
             public string Email => Instance.AllowEmail ? (Instance.User.Email ?? "-") : "-";
-            public string Since => TimeHelper.GetRangeStartString(Instance.Since, Instance.Since, _viewModel.TimeZoneId);
+            public string Since => TimeHelper.GetDateTimeString(Instance.Since, _viewModel.TimeZoneId);
         }
     }
 }

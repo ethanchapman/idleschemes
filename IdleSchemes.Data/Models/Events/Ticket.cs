@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleSchemes.Data.Models.Events {
@@ -16,5 +15,6 @@ namespace IdleSchemes.Data.Models.Events {
         [Column("UserId")]
         public User? User { get; set; }
         public string? HolderName { get; set; }
+
     }
 }

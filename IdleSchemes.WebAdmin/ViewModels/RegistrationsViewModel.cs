@@ -26,7 +26,7 @@ namespace IdleSchemes.WebAdmin.ViewModels {
                 .Include(r => r.Instance)
                 .Include(r => r.Tickets)
                 .Include(r => r.User)
-                .OrderBy(r => r.Confirmed)
+                .OrderByDescending(r => r.Confirmed)
                 .Skip(skip)
                 .ToListAsync();
             return dbResults

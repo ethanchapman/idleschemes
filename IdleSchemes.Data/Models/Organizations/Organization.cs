@@ -17,5 +17,6 @@ namespace IdleSchemes.Data.Models.Organizations {
         public bool RegionApproved { get; set; }
         public int? RegionScore { get; set; }
         public decimal RegistrationFee { get; set; } = 0.1m;
+        public DateTime LastPayout { get; set; } = DateTime.MinValue;
     }
 }

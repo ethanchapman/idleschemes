@@ -1,0 +1,41 @@
+﻿@page "/reviews"
+@inherits BaseAdminComponent<ReviewsViewModel>
+@layout MainLayout
+
+<PageTitle>@ViewModel.Title</PageTitle>
+
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">Submitted</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in ViewModel.PageList) {
+                    <tr>
+                        <td>@review.Submitted</td>
+                        <td>@review.Instance.Ticket.Registration.Instance.Info.Name</td>
+                        <td>@review.Instance.Rating</td>
+                        <td>@(review.Instance.Ticket.HolderName ?? "-")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

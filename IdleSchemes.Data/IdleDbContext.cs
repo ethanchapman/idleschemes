@@ -26,6 +26,7 @@ namespace IdleSchemes.Data {
         public DbSet<Ticket> Tickets { get; init; }
         public DbSet<Host> Hosts { get; init; }
         public DbSet<Registration> Registrations { get; init; }
+        public DbSet<Review> Reviews { get; init; }
 
     }
 }
