@@ -1,0 +1,59 @@
+﻿@page "/payments"
+@inherits BaseAdminComponent<PaymentsViewModel>
+@layout MainLayout
+
+<PageTitle>@ViewModel.Title</PageTitle>
+
+<div class="row mt-2">
+    <div class="col">
+        <h1>@ViewModel.Title</h1>
+    </div>
+    <div class="col text-end">
+        <div class="btn-group">
+            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.All ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.All)">All</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Pending ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Pending)">Pending</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Paid ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Paid)">Paid</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Cancelled ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Cancelled)">Cancelled</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Memo</th>
+                    <th scope="col">Registration</th>
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-secondary">
+                    <td><strong>SUM</strong></td>
+                    <td><strong>@MoneyHelper.ToString(ViewModel.Sum)</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @foreach (var payment in ViewModel.PageList) {
+                    <tr>
+                        <td>@payment.Id</td>
+                        <td>@MoneyHelper.ToString(payment.Registration?.Cost ?? 0)</td>
+                        <td>@payment.Memo</td>
+                        <td>@payment.Registration?.Id</td>
+                        <td>@payment.Time</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ListViewPageBar ViewModel="@ViewModel" />
+    </div>
+</div>
+

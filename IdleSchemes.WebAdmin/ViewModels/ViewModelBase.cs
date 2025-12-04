@@ -1,5 +1,6 @@
 ﻿using IdleSchemes.Core.Helpers;
 using IdleSchemes.Data.Models;
+using IdleSchemes.Data.Models.Organizations;
 
 namespace IdleSchemes.WebAdmin.ViewModels {
     public abstract class ViewModelBase {
@@ -8,6 +9,7 @@ namespace IdleSchemes.WebAdmin.ViewModels {
 
         public virtual bool RequireUser { get; } = true;
         public UserSession? CurrentSession { get; private set; }
+        public Organization? CurrentOrganization => CurrentSession?.ActiveAssociation?.Organization;
 
         public async Task InitializeAsync(UserSession? currentSession, Action refresh) {
             CurrentSession = currentSession;
