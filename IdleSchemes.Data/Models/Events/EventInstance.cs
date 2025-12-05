@@ -13,7 +13,7 @@ namespace IdleSchemes.Data.Models.Events {
         public required EventTemplate Template { get; init; }
         [InverseProperty(nameof(Host.Instance))]
         public List<Host> Hosts { get; set; } = new List<Host>();
-        public required EventInfo Info { get; set; } = new EventInfo();
+        public EventInfo Info { get; set; } = new EventInfo();
         public bool ListInRegion { get; set; } = false;
 
         public required DateTime Created { get; set; }

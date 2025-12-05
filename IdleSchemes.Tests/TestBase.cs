@@ -27,7 +27,6 @@ namespace IdleSchemes.Tests {
             serviceCollection.AddLogging(b => b.AddDebug());
             serviceCollection.AddSingleton<IConfiguration>(configuration);
             serviceCollection.AddScoped<TestSetupService>();
-            serviceCollection.AddScoped<TestEventHelper>();
 
             var apiAssembly = typeof(Program).Assembly;
             var apiTypes = apiAssembly.GetTypes();
@@ -102,14 +101,6 @@ namespace IdleSchemes.Tests {
                 var dbContext = scope.ServiceProvider.GetRequiredService<IdleDbContext>();
                 action(dbContext);
                 await dbContext.SaveChangesAsync();
-            }
-        }
-
-        protected async Task CreateEventsAsync(Action<TestEventHelper> action) {
-            using (var scope = CreateServiceScope()) {
-                var testEventHelper = scope.ServiceProvider.GetRequiredService<TestEventHelper>();
-                action(testEventHelper);
-                await scope.ServiceProvider.GetRequiredService<IdleDbContext>().SaveChangesAsync();
             }
         }
 

@@ -15,16 +15,16 @@ namespace IdleSchemes.Tests.Helpers {
         private readonly TimeService _timeService;
         private readonly UserService _userServce;
         private readonly SetupService _setupService;
-        private readonly TestEventHelper _testEventHelper;
+        private readonly EventFactoryService _eventFactoryService;
 
         public TestSetupService(IdleDbContext dbContext, IdService idService, TimeService timeService, UserService userService,
-            SetupService setupService, TestEventHelper testEventHelper) {
+            SetupService setupService, EventFactoryService eventFactoryService) {
             _dbContext = dbContext;
             _idService = idService;
             _timeService = timeService;
             _userServce = userService;
             _setupService = setupService;
-            _testEventHelper = testEventHelper;
+            _eventFactoryService = eventFactoryService;
         }
 
         public async Task DestroyAsync() {
@@ -130,28 +130,53 @@ namespace IdleSchemes.Tests.Helpers {
             }).Entity;
             #endregion
 
+            await _dbContext.SaveChangesAsync();
+
             #region Events
-            var ev1 = _testEventHelper.CreateEventInstance("B&N Event 1", brushAndNeedle, [ethanBrushAndNeedle],
-                [(now.Date.AddDays(1).AddHours(17), now.Date.AddDays(1).AddHours(19))],
-                [new TicketClassCreationOptions { Name = "General", Available = 10 }]);
+            var ev1 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
+                Name = "B&N Event 1",
+                OrganizationId = brushAndNeedle.Id,
+                Sessions = [new EventCreationOptions.Session {
+                    StartTime = now.Date.AddDays(1).AddHours(17),
+                    EndTime = now.Date.AddDays(1).AddHours(19)
+                }],
+                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+            });
             ev1.ListInRegion = true;
             ev1.Published = now;
 
-            var ev2 = _testEventHelper.CreateEventInstance("B&N Event 2", brushAndNeedle, [madelineBrushAndNeedle],
-                [(now.Date.AddDays(2).AddHours(17), now.Date.AddDays(2).AddHours(19))],
-                [new TicketClassCreationOptions { Name = "Class 1", Available = 5 }, new TicketClassCreationOptions { Name = "Class 2", Available = 5 }]);
+            var ev2 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
+                Name = "B&N Event 2",
+                OrganizationId = brushAndNeedle.Id,
+                Sessions = [new EventCreationOptions.Session {
+                    StartTime = now.Date.AddDays(2).AddHours(17),
+                    EndTime = now.Date.AddDays(2).AddHours(19)
+                }],
+                Tickets = [new TicketClassCreationOptions { Name = "Class 1", Count = 5 }, new TicketClassCreationOptions { Name = "Class 2", Count = 5 }]
+            }); 
             ev2.ListInRegion = true;
             ev2.Published = now;
 
-            var ev3 = _testEventHelper.CreateEventInstance("B&N Event 3", brushAndNeedle, [ethanBrushAndNeedle],
-                [(now.Date.AddDays(3).AddHours(17), now.Date.AddDays(3).AddHours(19))],
-                [new TicketClassCreationOptions { Name = "General", Available = 10 }]);
+            var ev3 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
+                Name = "B&N Event 3",
+                OrganizationId = brushAndNeedle.Id,
+                Sessions = [new EventCreationOptions.Session {
+                    StartTime = now.Date.AddDays(3).AddHours(17),
+                    EndTime = now.Date.AddDays(3).AddHours(19)
+                }],
+                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+            });
             ev3.Published = now;
 
-            var ev4 = _testEventHelper.CreateEventInstance("B&N Event 4", brushAndNeedle, [ethanBrushAndNeedle],
-                [(now.Date.AddDays(4).AddHours(17), now.Date.AddDays(4).AddHours(19))],
-                [new TicketClassCreationOptions { Name = "General", Available = 10 }]);
-
+            var ev4 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
+                Name = "B&N Event 4",
+                OrganizationId = brushAndNeedle.Id,
+                Sessions = [new EventCreationOptions.Session {
+                    StartTime = now.Date.AddDays(4).AddHours(17),
+                    EndTime = now.Date.AddDays(4).AddHours(19)
+                }],
+                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+            });
             #endregion
 
             await _dbContext.SaveChangesAsync();

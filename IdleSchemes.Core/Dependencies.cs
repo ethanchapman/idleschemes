@@ -14,6 +14,7 @@ namespace IdleSchemes.Core {
             serviceCollection.AddDbContext<IdleDbContext>((sp, o) => o.UseNpgsql(sp.GetRequiredService<IConfiguration>().GetConnectionString("Database")));
 
             serviceCollection.AddScoped<EventService>();
+            serviceCollection.AddScoped<EventFactoryService>();
             serviceCollection.AddScoped<SetupService>();
             serviceCollection.AddScoped<UserService>();
             serviceCollection.AddScoped<UserSessionService>();
