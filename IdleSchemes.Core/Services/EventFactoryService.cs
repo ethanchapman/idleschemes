@@ -56,6 +56,12 @@ namespace IdleSchemes.Core.Services {
                 .OrderBy(s => s.EndTime)
                 .Last()
                 .EndTime;
+            var hosts = await _dbContext.Associates
+                .Where(a => options.HostAssociateIds.Contains(a.Id))
+                .ToListAsync();
+            instance.Hosts = hosts
+                .Select(a => new Host { Associate =  a, Instance = instance })
+                .ToList();
             _dbContext.TicketClasses.AddRange(options.Tickets.Select((tc, i) => new TicketClass {
                 Id = _idService.GenerateId(),
                 Instance = instance,

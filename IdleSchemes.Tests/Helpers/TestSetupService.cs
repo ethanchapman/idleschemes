@@ -136,6 +136,7 @@ namespace IdleSchemes.Tests.Helpers {
             var ev1 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
                 Name = "B&N Event 1",
                 OrganizationId = brushAndNeedle.Id,
+                HostAssociateIds = [ethanBrushAndNeedle.Id],
                 Sessions = [new EventCreationOptions.Session {
                     StartTime = now.Date.AddDays(1).AddHours(17),
                     EndTime = now.Date.AddDays(1).AddHours(19)
@@ -148,6 +149,7 @@ namespace IdleSchemes.Tests.Helpers {
             var ev2 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
                 Name = "B&N Event 2",
                 OrganizationId = brushAndNeedle.Id,
+                HostAssociateIds = [madelineBrushAndNeedle.Id],
                 Sessions = [new EventCreationOptions.Session {
                     StartTime = now.Date.AddDays(2).AddHours(17),
                     EndTime = now.Date.AddDays(2).AddHours(19)
@@ -160,6 +162,7 @@ namespace IdleSchemes.Tests.Helpers {
             var ev3 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
                 Name = "B&N Event 3",
                 OrganizationId = brushAndNeedle.Id,
+                HostAssociateIds = [ethanBrushAndNeedle.Id],
                 Sessions = [new EventCreationOptions.Session {
                     StartTime = now.Date.AddDays(3).AddHours(17),
                     EndTime = now.Date.AddDays(3).AddHours(19)
@@ -171,6 +174,7 @@ namespace IdleSchemes.Tests.Helpers {
             var ev4 = await _eventFactoryService.CreateEventAsync(new EventCreationOptions {
                 Name = "B&N Event 4",
                 OrganizationId = brushAndNeedle.Id,
+                HostAssociateIds = [ethanBrushAndNeedle.Id],
                 Sessions = [new EventCreationOptions.Session {
                     StartTime = now.Date.AddDays(4).AddHours(17),
                     EndTime = now.Date.AddDays(4).AddHours(19)
