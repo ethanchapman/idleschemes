@@ -19,6 +19,6 @@ namespace IdleSchemes.Data.Models.Events {
         public DateTime? Cancelled { get; set; }
 
         [InverseProperty(nameof(Ticket.Registration))]
-        public List<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public List<TicketClaim> Claims { get; set; } = new List<TicketClaim>();
     }
 }

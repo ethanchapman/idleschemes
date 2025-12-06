@@ -16,7 +16,7 @@ namespace IdleSchemes.Api.Models.Input {
 
         public class SeatAssignment {
             public string? Seat { get; set; }
-            public string? HolderName { get; set; }
+            public string? ForName { get; set; }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace IdleSchemes.Api.Controllers {
                 return Unauthorized();
             }
             TimeHelper.SetFromAndToIfNecessary(ref from, ref to, _timeService.GetNow(), out var order, TimeSpan.FromDays(32), TimeSpan.FromDays(365));
-            var tickets = await _dbContext.Tickets
+            var tickets = await _dbContext.TicketClaims
                 .Include(t => t.User)
                 .Include(t => t.Registration)
                 .ThenInclude(r => r.Instance)
@@ -64,9 +64,10 @@ namespace IdleSchemes.Api.Controllers {
             TimeHelper.SetFromAndToIfNecessary(ref from, ref to, _timeService.GetNow(), out var order, TimeSpan.FromDays(32), TimeSpan.FromDays(365));
             var registrations = await _dbContext.Registrations
                 .Include(r => r.Instance)
-                .Include(r => r.Tickets)
+                .Include(r => r.Claims)
                 .ThenInclude(t => t.User)
-                .Include(r => r.Tickets)
+                .Include(r => r.Claims)
+                .ThenInclude(t => t.Ticket)
                 .ThenInclude(t => t.TicketClass)
                 .Where(r => r.User == _userSessionService.CurrentUser
                     && r.Confirmed != null
@@ -85,7 +86,7 @@ namespace IdleSchemes.Api.Controllers {
             }
             var registration = await _dbContext.Registrations
                 .Include(r => r.Instance)
-                .Include(r => r.Tickets)
+                .Include(r => r.Claims)
                 .ThenInclude(t => t.User)
                 .Where(r => r.Id == registrationId 
                     && r.User == _userSessionService.CurrentUser && r.Confirmed != null)

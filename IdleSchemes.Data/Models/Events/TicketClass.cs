@@ -15,12 +15,13 @@ namespace IdleSchemes.Data.Models.Events {
         public required EventInstance Instance { get; init; }
         public required string Name { get; init; }
         public required int OrderSeq { get; set; }
+        public int? Limit { get; set; }
         public bool CanRegister { get; set; } = true;
+        public bool DiscreteTickets { get; set; } = false;
         public string? InviteCode { get; set; }
-        public int BasePrice { get; set; } = 0;
-
-        public int? TotalCount { get; set; }
-        public string? SeatOptions { get; set; }
+        public int Price { get; set; } = 0;
         public SeatSelection SeatSelection { get; set; } = SeatSelection.Deny;
+        [InverseProperty(nameof(Ticket.TicketClass))]
+        public List<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

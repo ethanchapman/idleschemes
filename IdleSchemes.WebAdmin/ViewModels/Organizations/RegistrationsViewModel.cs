@@ -24,7 +24,7 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
             var dbResults = await _dbContext.Registrations
                 .Where(r => r.Confirmed != null && r.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization)
                 .Include(r => r.Instance)
-                .Include(r => r.Tickets)
+                .Include(r => r.Claims)
                 .Include(r => r.User)
                 .OrderByDescending(r => r.Confirmed)
                 .Skip(skip)

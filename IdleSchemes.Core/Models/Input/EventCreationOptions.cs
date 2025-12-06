@@ -6,6 +6,7 @@
         public DateTime? RegistrationOpen { get; set; }
         public DateTime? RegistrationClose { get; set; }
         public DateTime? CancellationDeadline { get; set; }
+        public TicketScheme TicketScheme { get; set; } = new TicketScheme();
 
         public class Session {
             public DateTime StartTime { get; set; }

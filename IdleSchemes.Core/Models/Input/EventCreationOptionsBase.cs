@@ -5,7 +5,6 @@
         public string ShortDescription { get; set; } = "";
         public string LongDescription { get; set; } = "";
         public List<ImageInfoModel> Images { get; set; } = new List<ImageInfoModel>();
-        public List<TicketClassCreationOptions> Tickets { get; set; } = new List<TicketClassCreationOptions>();
         public int? IndividualTicketLimit { get; set; } = null;
     }
 }

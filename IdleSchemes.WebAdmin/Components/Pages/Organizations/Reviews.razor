@@ -24,9 +24,9 @@
                 @foreach (var review in ViewModel.PageList) {
                     <tr>
                         <td>@review.Submitted</td>
-                        <td>@review.Instance.Ticket.Registration.Instance.Info.Name</td>
+                        <td>@review.Instance.Ticket.Registration!.Instance.Info.Name</td>
                         <td>@review.Instance.Rating</td>
-                        <td>@(review.Instance.Ticket.HolderName ?? "-")</td>
+                        <td>@(review.Instance.Ticket.Registration!.Claims.FirstOrDefault(c =>c.Ticket.Id == review.Instance.Ticket.Id)?.ForName ?? "-")</td>
                     </tr>
                 }
             </tbody>

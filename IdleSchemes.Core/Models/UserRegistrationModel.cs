@@ -9,7 +9,7 @@ namespace IdleSchemes.Core.Models {
         public UserRegistrationModel(Registration registration) {
             Id = registration.Id;
             Event = new EventInstanceModel(registration.Instance);
-            Tickets = registration.Tickets
+            Tickets = registration.Claims
                 .Select(t => new RegistrationTicket(t))
                 .ToList();
         }
@@ -22,13 +22,13 @@ namespace IdleSchemes.Core.Models {
             public RegistrationTicket() {
             }
 
-            public RegistrationTicket(Ticket ticket) {
-                Id = ticket.Id;
-                Class = ticket.TicketClass.Name;
-                Seat = ticket.Seat;
-                Name = ticket.HolderName ?? ticket.User?.Name;
-                Email = ticket.User?.Email;
-                Phone = ticket.User?.Phone;
+            public RegistrationTicket(TicketClaim ticketClaim) {
+                Id = ticketClaim.Ticket.Id;
+                Class = ticketClaim.Ticket.TicketClass.Name;
+                Seat = ticketClaim.Ticket.Seat;
+                Name = ticketClaim.ForName ?? ticketClaim.User?.Name;
+                Email = ticketClaim.User?.Email;
+                Phone = ticketClaim.User?.Phone;
             }
 
             public string Id { get; set; } = "";

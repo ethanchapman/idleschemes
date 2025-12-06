@@ -62,16 +62,25 @@ namespace IdleSchemes.Core.Services {
             instance.Hosts = hosts
                 .Select(a => new Host { Associate =  a, Instance = instance })
                 .ToList();
-            _dbContext.TicketClasses.AddRange(options.Tickets.Select((tc, i) => new TicketClass {
-                Id = _idService.GenerateId(),
-                Instance = instance,
-                Name = tc.Name,
-                OrderSeq = i,
-                TotalCount = tc.Count,
-                SeatOptions = tc.Seats is null ? null : SerializationHelper.Serialize(tc.Seats),
-                BasePrice = tc.BasePrice,
-                CanRegister = tc.CanRegister,
-            }));
+            int i = 0;
+            foreach(var tc in options.TicketScheme.Classes) {
+                var ticketClass = _dbContext.TicketClasses.Add(new TicketClass { 
+                    Id = _idService.GenerateId(),
+                    Instance = instance,
+                    Name = tc.Name,
+                    OrderSeq = i,
+                    Limit = tc.Limit,
+                    CanRegister = tc.CanRegister,
+                    DiscreteTickets = tc.Tickets.Any(),
+                    InviteCode = tc.RequiresCode ? _idService.GenerateSecret(8) : null
+                }).Entity;
+                i++;
+                _dbContext.Tickets.AddRange(tc.Tickets.Select(t => new Ticket {
+                    Id = _idService.GenerateId(),
+                    TicketClass = ticketClass,
+                    Seat = t.Seat,
+                }));
+            }
             return instance;
         }
 

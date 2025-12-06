@@ -16,7 +16,7 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
 
         protected override Task<int> CountAllAsync() {
             return _dbContext.Reviews
-                .Where(r => r.Ticket.Registration.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization)
+                .Where(r => r.Ticket.Registration!.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization)
                 .CountAsync();
         }
 
@@ -24,10 +24,10 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
             var dbResults = await _dbContext.Reviews
                 .Include(r => r.Ticket)
                 .ThenInclude(t => t.Registration)
-                .ThenInclude(r => r.Instance)
+                .ThenInclude(r => r!.Instance)
                 .ThenInclude(i => i.Template)
                 .ThenInclude(t => t.Organization)
-                .Where(r => r.Ticket.Registration.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization)
+                .Where(r => r.Ticket.Registration!.Instance.Template.Organization == CurrentSession!.ActiveAssociation!.Organization)
                 .OrderBy(r => r.Submitted)
                 .Skip(skip)
                 .ToListAsync();

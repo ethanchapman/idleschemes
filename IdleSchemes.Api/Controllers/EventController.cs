@@ -41,7 +41,7 @@ namespace IdleSchemes.Api.Controllers {
         }
 
         [HttpGet("all/{eventId}/tickets", Name = "GetAvailableTickets")]
-        public async Task<ActionResult<IEnumerable<TicketClassModel>>> GetAvailableTickets(string eventId) {
+        public async Task<ActionResult<PublicTicketCollection>> GetAvailableTickets(string eventId) {
             var instance = await _dbContext.EventInstances
                 .Include(i => i.TicketClasses)
                 .Where(e => e.Id == eventId)
@@ -49,8 +49,8 @@ namespace IdleSchemes.Api.Controllers {
             if (instance is null) {
                 return NotFound();
             }
-            var ticketClassesWithAvailability = await _eventService.GetTicketClassesWithAvailabilityAsync(instance);
-            return Ok(ticketClassesWithAvailability);
+            var ticketCollection = await _eventService.GetAllTicketsAsync(instance);
+            return Ok(new PublicTicketCollection(ticketCollection));
         }
 
         [HttpGet("regions/{regionId}", Name = "GetEventsInRegion")]

@@ -141,7 +141,9 @@ namespace IdleSchemes.Tests.Helpers {
                     StartTime = now.Date.AddDays(1).AddHours(17),
                     EndTime = now.Date.AddDays(1).AddHours(19)
                 }],
-                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+                TicketScheme = new TicketScheme {
+                    Classes = [new TicketSchemeClass { Name = "General", Limit = 10}]
+                }
             });
             ev1.ListInRegion = true;
             ev1.Published = now;
@@ -154,9 +156,11 @@ namespace IdleSchemes.Tests.Helpers {
                     StartTime = now.Date.AddDays(2).AddHours(17),
                     EndTime = now.Date.AddDays(2).AddHours(19)
                 }],
-                Tickets = [
-                    new TicketClassCreationOptions { Name = "Class 1", Count = 5 },
-                    new TicketClassCreationOptions { Name = "Class 2", Count = 5 }]
+                TicketScheme = new TicketScheme {
+                    Classes = [
+                        new TicketSchemeClass { Name = "Class 1", Limit = 5 },
+                        new TicketSchemeClass { Name = "Class 2", Limit = 5 }]
+                }
             }); 
             ev2.ListInRegion = true;
             ev2.Published = now;
@@ -169,7 +173,9 @@ namespace IdleSchemes.Tests.Helpers {
                     StartTime = now.Date.AddDays(3).AddHours(17),
                     EndTime = now.Date.AddDays(3).AddHours(19)
                 }],
-                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+                TicketScheme = new TicketScheme {
+                    Classes = [new TicketSchemeClass { Name = "General", Limit = 10 }]
+                }
             });
             ev3.Published = now;
 
@@ -181,7 +187,9 @@ namespace IdleSchemes.Tests.Helpers {
                     StartTime = now.Date.AddDays(4).AddHours(17),
                     EndTime = now.Date.AddDays(4).AddHours(19)
                 }],
-                Tickets = [new TicketClassCreationOptions { Name = "General", Count = 10 }]
+                TicketScheme = new TicketScheme {
+                    Classes = [new TicketSchemeClass { Name = "General", Limit = 10 }]
+                }
             });
             #endregion
 

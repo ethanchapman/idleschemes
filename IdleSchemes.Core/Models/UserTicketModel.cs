@@ -6,13 +6,13 @@ namespace IdleSchemes.Core.Models {
         public UserTicketModel() {
         }
 
-        public UserTicketModel(Ticket ticket) {
-            Id = ticket.Id;
-            RegistrationId = ticket.Registration.Id;
-            Class = ticket.TicketClass.Name;
-            Seat = ticket.Seat;
-            Event = new EventInstanceModel(ticket.Registration.Instance);
-            CanManage = ticket.User == ticket.Registration.User;
+        public UserTicketModel(TicketClaim ticketClaim) {
+            Id = ticketClaim.Ticket.Id;
+            RegistrationId = ticketClaim.Registration.Id;
+            Class = ticketClaim.Ticket.TicketClass.Name;
+            Seat = ticketClaim.Ticket.Seat;
+            Event = new EventInstanceModel(ticketClaim.Registration.Instance);
+            CanManage = ticketClaim.User == ticketClaim.Registration.User;
         }
 
         public string Id { get; set; } = "";

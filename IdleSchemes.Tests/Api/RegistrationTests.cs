@@ -13,28 +13,28 @@ namespace IdleSchemes.Tests.Api {
             var evs = await ExecuteAsyncAction<EventController, IEnumerable<EventInstanceModel>>(c => c.GetEventsInRegion("den"));
             var ev = evs.First(e => e.Name == "B&N Event 1");
 
-            var ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(1);
-            ticketClasses.First().Name.ShouldBe("General");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(10);
+            var ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(1);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("General");
+            ticketClasses.Classes.First().All.ShouldBe(10);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.First().Pending.ShouldBe(0);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(10);
 
             ev = evs.First(e => e.Name == "B&N Event 2");
 
-            ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(2);
-            ticketClasses.First().Name.ShouldBe("Class 1");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(5);
-            ticketClasses.Last().Name.ShouldBe("Class 2");
-            ticketClasses.Last().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.Last().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.Last().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.Last().Availability!.RemainingCount.ShouldBe(5);
+            ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(2);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("Class 1");
+            ticketClasses.Classes.First().All.ShouldBe(5);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.First().Pending.ShouldBe(0);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(5);
+            ticketClasses.Classes.Last().Class.Name.ShouldBe("Class 2");
+            ticketClasses.Classes.Last().All.ShouldBe(5);
+            ticketClasses.Classes.Last().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.Last().Pending.ShouldBe(0);
+            ticketClasses.Classes.Last().Available.Count.ShouldBe(5);
         }
 
         [Test]
@@ -52,28 +52,26 @@ namespace IdleSchemes.Tests.Api {
                 TicketReservations = [new ReserveTicketsModel.TicketReservation { Class = "General", Count = 1 }]
             }), "ethan@idleschemes.com");
 
-            var ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(1);
-            ticketClasses.First().Name.ShouldBe("General");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(1);
-            ticketClasses.First().Availability!.ConfirmedAndPendingCount.ShouldBe(1);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(9);
+            var ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(1);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("General");
+            ticketClasses.Classes.First().All.ShouldBe(10);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.First().Pending.ShouldBe(1);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(9);
 
             var confirmation = await ExecuteAsyncAction<RegistrationController, ActionResult>(c => c.ConfirmTickets(new ConfirmRegistrationModel {
                 RegistrationId = registration.Id,
                 RegistrationSecret = registration.Secret
             }), "ethan@idleschemes.com");
 
-            ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(1);
-            ticketClasses.First().Name.ShouldBe("General");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(1);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.First().Availability!.ConfirmedAndPendingCount.ShouldBe(1);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(9);
+            ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(1);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("General");
+            ticketClasses.Classes.First().All.ShouldBe(10);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(1);
+            ticketClasses.Classes.First().Pending.ShouldBe(0);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(9);
 
         }
 
@@ -92,28 +90,26 @@ namespace IdleSchemes.Tests.Api {
                 TicketReservations = [new ReserveTicketsModel.TicketReservation { Class = "General", Count = 4 }]
             }), "ethan@idleschemes.com");
 
-            var ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(1);
-            ticketClasses.First().Name.ShouldBe("General");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(4);
-            ticketClasses.First().Availability!.ConfirmedAndPendingCount.ShouldBe(4);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(6);
+            var ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(1);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("General");
+            ticketClasses.Classes.First().All.ShouldBe(10);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.First().Pending.ShouldBe(4);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(6);
 
             var confirmation = await ExecuteAsyncAction<RegistrationController, ActionResult>(c => c.ConfirmTickets(new ConfirmRegistrationModel {
                 RegistrationId = registration.Id,
                 RegistrationSecret = registration.Secret
             }), "ethan@idleschemes.com");
 
-            ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.Count().ShouldBe(1);
-            ticketClasses.First().Name.ShouldBe("General");
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(4);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.First().Availability!.ConfirmedAndPendingCount.ShouldBe(4);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(6);
+            ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Count().ShouldBe(1);
+            ticketClasses.Classes.First().Class.Name.ShouldBe("General");
+            ticketClasses.Classes.First().All.ShouldBe(10);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(4);
+            ticketClasses.Classes.First().Pending.ShouldBe(0);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(6);
 
         }
 
@@ -132,26 +128,27 @@ namespace IdleSchemes.Tests.Api {
                 TicketReservations = [new ReserveTicketsModel.TicketReservation { Class = "Class 1", Count = 1 }, new ReserveTicketsModel.TicketReservation { Class = "Class 2", Count = 2 }]
             }), "ethan@idleschemes.com");
 
-            var ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(1);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(4);
-            ticketClasses.Last().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.Last().Availability!.PendingCount.ShouldBe(2);
-            ticketClasses.Last().Availability!.RemainingCount.ShouldBe(3);
+            var ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+
+            ticketClasses.Classes.First().All.ShouldBe(5);
+            ticketClasses.Classes.First().Pending.ShouldBe(1);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(4);
+            ticketClasses.Classes.Last().All.ShouldBe(5);
+            ticketClasses.Classes.Last().Pending.ShouldBe(2);
+            ticketClasses.Classes.Last().Available.Count.ShouldBe(3);
 
             var confirmation = await ExecuteAsyncAction<RegistrationController, ActionResult>(c => c.ConfirmTickets(new ConfirmRegistrationModel {
                 RegistrationId = registration.Id,
                 RegistrationSecret = registration.Secret
             }), "ethan@idleschemes.com");
 
-            ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(1);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(4);
-            ticketClasses.Last().Availability!.TotalCount.ShouldBe(5);
-            ticketClasses.Last().Availability!.ConfirmedCount.ShouldBe(2);
-            ticketClasses.Last().Availability!.RemainingCount.ShouldBe(3);
+            ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.First().All.ShouldBe(5);
+            ticketClasses.Classes.First().Confirmed.ShouldBe(1);
+            ticketClasses.Classes.First().Available.Count.ShouldBe(4);
+            ticketClasses.Classes.Last().All.ShouldBe(5);
+            ticketClasses.Classes.Last().Confirmed.ShouldBe(2);
+            ticketClasses.Classes.Last().Available.Count.ShouldBe(3);
 
         }
 
@@ -220,11 +217,11 @@ namespace IdleSchemes.Tests.Api {
             await ExecuteAsyncAction<UserEventsController, ActionResult>(c => c.CancelEventRegistration(registrations.First().Id),
                 "ethan@idleschemes.com");
 
-            var ticketClasses = await ExecuteAsyncAction<EventController, IEnumerable<TicketClassModel>>(c => c.GetAvailableTickets(ev.Id));
-            ticketClasses.First().Availability!.TotalCount.ShouldBe(10);
-            ticketClasses.First().Availability!.PendingCount.ShouldBe(0);
-            ticketClasses.First().Availability!.ConfirmedCount.ShouldBe(0);
-            ticketClasses.First().Availability!.RemainingCount.ShouldBe(10);
+            var ticketClasses = await ExecuteAsyncAction<EventController, PublicTicketCollection>(c => c.GetAvailableTickets(ev.Id));
+            ticketClasses.Classes.Last().All.ShouldBe(10);
+            ticketClasses.Classes.Last().Pending.ShouldBe(0);
+            ticketClasses.Classes.Last().Confirmed.ShouldBe(0);
+            ticketClasses.Classes.Last().Available.Count.ShouldBe(10);
 
         }
 

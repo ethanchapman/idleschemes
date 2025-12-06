@@ -104,22 +104,24 @@ namespace IdleSchemes.Api.Controllers {
                 return BadRequest();
             }
 
-            var ticketLimit = registration.Instance.Info.IndividualTicketLimit;
+            var individualTicketLimit = registration.Instance.Info.IndividualTicketLimit;
             var totalTicketCount = model.TicketReservations.Sum(r => r.Count);
-            if (ticketLimit is not null && model.TicketReservations.Sum(r => r.Count) > ticketLimit) {
+            if (individualTicketLimit is not null && model.TicketReservations.Sum(r => r.Count) > individualTicketLimit) {
                 _logger.LogInformation("Too many tickets in reservation" +
                     " ({totalTicketCount}/{ticketLimit} Registration {RegistrationId} Event {EventId})",
-                    totalTicketCount, ticketLimit, registration.Id, registration.Instance.Id);
+                    totalTicketCount, individualTicketLimit, registration.Id, registration.Instance.Id);
                 return BadRequest();
             }
 
-            var ticketClassesWithAvailability = await _eventService.GetTicketClassesWithAvailabilityAsync(registration.Instance,
-                model.TicketReservations.Select(t => t.Class).ToList(),
-                now);
-            var newTickets = new List<Ticket>();
-            foreach(var reservation in model.TicketReservations) {
-                var ticketClass = registration.Instance.TicketClasses
-                    .FirstOrDefault(tc => tc.Name == reservation.Class);
+            var tickets = await _eventService.GetAllTicketsAsync(registration.Instance, now);
+            var result = new ReservationInfoModel {
+                Id = registration.Id
+            };
+
+            foreach (var reservation in model.TicketReservations) {
+                var ticketClass = tickets.Classes
+                    .FirstOrDefault(tc => tc.Class.Name == reservation.Class);
+
                 if (ticketClass is null) {
                     _logger.LogInformation("Ticket class that does not exist" +
                         " ({Class} Registration {RegistrationId} Event {EventId})",
@@ -127,57 +129,69 @@ namespace IdleSchemes.Api.Controllers {
                     return BadRequest();
                 }
 
-                if (!ticketClass.CanRegister) {
+                if (!ticketClass.Class.CanRegister) {
                     _logger.LogInformation("Ticket class is unavailable" +
                         " ({Class} Registration {RegistrationId} Event {EventId})",
                         ticketClass, registration.Id, registration.Instance.Id);
                     return BadRequest();
                 }
 
-                if(!string.IsNullOrEmpty(ticketClass.InviteCode) && reservation.Code != ticketClass.InviteCode) {
+                if(!string.IsNullOrEmpty(ticketClass.Class.InviteCode) && reservation.Code != ticketClass.Class.InviteCode) {
                     _logger.LogInformation("Invalid invite code" +
                         " ({Class} Registration {RegistrationId} Event {EventId})",
                         ticketClass, registration.Id, registration.Instance.Id);
                     return BadRequest();
                 }
 
-                var availabilityInfo = ticketClassesWithAvailability
-                    .FirstOrDefault(tcwa => tcwa.Id == ticketClass.Id)?.Availability;
-                if (availabilityInfo is null) {
-                    _logger.LogInformation("Availability information not found for ticket class" +
-                        " ({Class} Registration {RegistrationId} Event {EventId})",
-                        reservation.Class, registration.Id, registration.Instance.Id);
+                if (ticketClass.RemainingCount is not null && ticketClass.RemainingCount < reservation.Count) {
+                    _logger.LogInformation("Not enough tickets available for class" +
+                        " ({Count}/{Remaining} Class {Class} Registration {RegistrationId} Event {EventId})",
+                        reservation.Count, ticketClass.RemainingCount, reservation.Class, registration.Id, registration.Instance.Id);
                     return BadRequest();
                 }
 
-                if (availabilityInfo.RemainingCount is not null && availabilityInfo.RemainingCount < reservation.Count) {
-                    _logger.LogInformation("Not enough tickets available for class" +
-                        " ({Count}/{Remaining} Class {Class} Registration {RegistrationId} Event {EventId})",
-                        reservation.Count, availabilityInfo.RemainingCount, reservation.Class, registration.Id, registration.Instance.Id);
-                    return BadRequest();
-                }
-                if (string.IsNullOrEmpty(ticketClass.SeatOptions) && reservation.Count is not null) {
+                if (reservation.Count is not null && !ticketClass.Class.DiscreteTickets) {
                     // No seats, reserve via simple count
-                    newTickets.AddRange(Enumerable.Range(0, reservation.Count.Value).Select(i => new Ticket {
-                        Id = _idService.GenerateId(),
-                        Registration = registration,
-                        TicketClass = ticketClass
-                    }));
-                    registration.Cost += ticketClass.BasePrice * reservation.Count.Value;
-                } else if (!string.IsNullOrEmpty(ticketClass.SeatOptions) && reservation.Count is not null && reservation.Seats is null
-                        && (ticketClass.SeatSelection == SeatSelection.Allow || ticketClass.SeatSelection == SeatSelection.Deny)) {
+                    var claims = Enumerable.Range(0, reservation.Count.Value)
+                        .Select(i => new TicketClaim {
+                            Registration = registration,
+                            Ticket = new Ticket {
+                                Id = _idService.GenerateId(),
+                                Registration = registration,
+                                TicketClass = ticketClass.Class
+                            }
+                        });
+                    _dbContext.TicketClaims.AddRange(claims);
+                    result.Tickets = claims.Select(c => new ReservationInfoModel.Ticket {
+                        Id = c.Ticket.Id,
+                        Class = c.Ticket.TicketClass.Name,
+                        Seat = c.Ticket.Seat
+                    }).ToList();
+                    registration.Cost += ticketClass.Class.Price * reservation.Count.Value;
+                } else if (reservation.Count is not null && ticketClass.Class.DiscreteTickets
+                        && (ticketClass.Class.SeatSelection == SeatSelection.Allow || ticketClass.Class.SeatSelection == SeatSelection.Deny)) {
                     // Auto-assign seats
-                    newTickets.AddRange(availabilityInfo.RemainingSeats.Take(reservation.Count.Value).Select(t => new Ticket {
-                        Id = _idService.GenerateId(),
-                        Registration = registration,
-                        TicketClass = ticketClass,
-                        Seat = t
-                    }));
-                } else if (!string.IsNullOrEmpty(ticketClass.SeatOptions) && reservation.Count is null && reservation.Seats is not null
-                        && (ticketClass.SeatSelection == SeatSelection.Allow || ticketClass.SeatSelection == SeatSelection.Require)) {
+                    var claims = ticketClass.Available
+                        .Take(reservation.Count.Value)
+                        .Select(t => new TicketClaim {
+                            Registration = registration,
+                            Ticket = t
+                        });
+                    foreach(var claim in claims) {
+                        claim.Ticket.Registration = registration;
+                    }
+                    _dbContext.TicketClaims.AddRange(claims);
+                    result.Tickets = claims.Select(c => new ReservationInfoModel.Ticket {
+                        Id = c.Ticket.Id,
+                        Class = c.Ticket.TicketClass.Name,
+                        Seat = c.Ticket.Seat
+                    }).ToList();
+                } else if (reservation.Count is null && reservation.Seats is not null
+                        && (ticketClass.Class.SeatSelection == SeatSelection.Allow || ticketClass.Class.SeatSelection == SeatSelection.Require)) {
                     // Specific seats
                     var unavailableSeats = reservation.Seats
-                        .Where(s => !availabilityInfo.RemainingSeats.Contains(s.Seat ?? ""));
+                        .Select(s => s.Seat)
+                        .Where(s => !ticketClass.Available.Any(at => at.Seat == s));
                     if (unavailableSeats.Any()) {
                         var unavailableStr = string.Join(",", unavailableSeats);
                         _logger.LogInformation("Reservation included unavailable seats" +
@@ -185,13 +199,15 @@ namespace IdleSchemes.Api.Controllers {
                             unavailableStr, reservation.Class, registration.Id, registration.Instance.Id);
                         return BadRequest();
                     }
-                    newTickets.AddRange(reservation.Seats.Select(t => new Ticket {
-                        Id = _idService.GenerateId(),
-                        Registration = registration,
-                        TicketClass = ticketClass,
-                        Seat = t.Seat,
-                        HolderName = t.HolderName
-                    }));
+
+                    foreach(var seatReservation in reservation.Seats) {
+                        var claim = _dbContext.TicketClaims.Add(new TicketClaim {
+                            Registration = registration,
+                            Ticket = ticketClass.Available.First(t => t.Seat == seatReservation.Seat),
+                            ForName = seatReservation.ForName
+                        }).Entity;
+                        claim.Ticket.Registration = registration;
+                    }
                 } else {
                     _logger.LogInformation("Invalid ticket reservation" +
                         " (Class {Class} Registration {RegistrationId} Event {EventId})",
@@ -201,18 +217,10 @@ namespace IdleSchemes.Api.Controllers {
 
             }
 
-            _dbContext.Tickets.AddRange(newTickets);
             registration.TicketsClaimed = now;
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new ReservationInfoModel {
-                Id = registration.Id,
-                Tickets = newTickets.Select(t => new ReservationInfoModel.Ticket { 
-                    Id = t.Id,
-                    Class = t.TicketClass.Name, 
-                    Seat = t.Seat 
-                }).ToList()
-            });
+            return Ok(result);
         }
 
         [HttpPost("confirm", Name = "ConfirmPayment")]
