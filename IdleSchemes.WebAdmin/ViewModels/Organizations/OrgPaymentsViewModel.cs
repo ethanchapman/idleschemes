@@ -1,17 +1,15 @@
-﻿using IdleSchemes.Core.Helpers;
-using IdleSchemes.Core.Services;
+﻿using IdleSchemes.Core.Services;
 using IdleSchemes.Data;
-using IdleSchemes.Data.Models.Events;
 using IdleSchemes.Data.Models.Organizations;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
-    public class PaymentsViewModel : ListViewModel<Payment> {
+    public class OrgPaymentsViewModel : ListViewModel<Payment> {
 
         private readonly IdleDbContext _dbContext;
         private readonly DateTime _now;
 
-        public PaymentsViewModel(IdleDbContext dbContext, TimeService timeService) {
+        public OrgPaymentsViewModel(IdleDbContext dbContext, TimeService timeService) {
             _dbContext = dbContext;
             _now = timeService.GetNow();
         }
@@ -44,16 +42,16 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
             var organization = CurrentSession!.ActiveAssociation!.Organization;
             if (FinanceFilter == FinanceFilterOption.Cancelled) {
                 return _dbContext.Payments
-                    .Where(p => p.Organization == CurrentOrganization && p.Cancelled != null);
+                    .Where(p => p.Organization == CurrentOrganization && p.Associate == null && p.Cancelled != null);
             } else if (FinanceFilter == FinanceFilterOption.Paid) {
                 return _dbContext.Payments
-                    .Where(p => p.Organization == CurrentOrganization && p.Paid != null);
+                    .Where(p => p.Organization == CurrentOrganization && p.Associate == null && p.Paid != null);
             } else if (FinanceFilter == FinanceFilterOption.Pending) {
                 return _dbContext.Payments
-                    .Where(p => p.Organization == CurrentOrganization && p.Cancelled == null && p.Paid == null);
+                    .Where(p => p.Organization == CurrentOrganization && p.Associate == null && p.Cancelled == null && p.Paid == null);
             } else {
                 return _dbContext.Payments
-                    .Where(p => p.Organization == CurrentOrganization);
+                    .Where(p => p.Organization == CurrentOrganization && p.Associate == null);
             }
         }
 
@@ -64,15 +62,5 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
             Cancelled
         }
 
-        public class RegistrationInfo {
-            private readonly PaymentsViewModel _viewModel;
-            public RegistrationInfo(Registration registration, PaymentsViewModel viewModel) {
-                Registration = registration;
-                _viewModel = viewModel;
-            }
-
-            public Registration Registration { get; }
-            public string Confirmed => TimeHelper.GetDateTimeString(Registration.Confirmed!.Value, _viewModel.TimeZoneId);
-        }
     }
 }

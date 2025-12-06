@@ -1,5 +1,5 @@
-﻿@page "/org/payments"
-@inherits BaseAdminComponent<PaymentsViewModel>
+﻿@page "/me/payments"
+@inherits BaseAdminComponent<MyPaymentsViewModel>
 @layout MainLayout
 
 <PageTitle>@ViewModel.Title</PageTitle>
@@ -10,10 +10,10 @@
     </div>
     <div class="col text-end">
         <div class="btn-group">
-            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.All ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.All)">All</button>
-            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Pending ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Pending)">Pending</button>
-            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Paid ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Paid)">Paid</button>
-            <button type="button" class="btn @(ViewModel.FinanceFilter == PaymentsViewModel.FinanceFilterOption.Cancelled ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(PaymentsViewModel.FinanceFilterOption.Cancelled)">Cancelled</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == MyPaymentsViewModel.FinanceFilterOption.All ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(MyPaymentsViewModel.FinanceFilterOption.All)">All</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == MyPaymentsViewModel.FinanceFilterOption.Pending ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(MyPaymentsViewModel.FinanceFilterOption.Pending)">Pending</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == MyPaymentsViewModel.FinanceFilterOption.Paid ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(MyPaymentsViewModel.FinanceFilterOption.Paid)">Paid</button>
+            <button type="button" class="btn @(ViewModel.FinanceFilter == MyPaymentsViewModel.FinanceFilterOption.Cancelled ? "btn-primary" : "btn-secondary")" @onclick="() => ViewModel.SetFinanceFilterAsync(MyPaymentsViewModel.FinanceFilterOption.Cancelled)">Cancelled</button>
         </div>
     </div>
 </div>

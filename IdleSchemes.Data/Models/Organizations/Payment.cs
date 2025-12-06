@@ -8,6 +8,8 @@ namespace IdleSchemes.Data.Models.Organizations {
         public required string Id { get; init; }
         [Column("OrganizationId")]
         public required Organization Organization { get; init; }
+        [Column("AssociateId")]
+        public required Associate? Associate { get; init; }
         [Column("RegistrationId")]
         public Registration? Registration { get; init; }
         public required string Memo { get; init; }
