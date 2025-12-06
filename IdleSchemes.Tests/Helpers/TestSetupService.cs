@@ -154,7 +154,9 @@ namespace IdleSchemes.Tests.Helpers {
                     StartTime = now.Date.AddDays(2).AddHours(17),
                     EndTime = now.Date.AddDays(2).AddHours(19)
                 }],
-                Tickets = [new TicketClassCreationOptions { Name = "Class 1", Count = 5 }, new TicketClassCreationOptions { Name = "Class 2", Count = 5 }]
+                Tickets = [
+                    new TicketClassCreationOptions { Name = "Class 1", Count = 5 },
+                    new TicketClassCreationOptions { Name = "Class 2", Count = 5 }]
             }); 
             ev2.ListInRegion = true;
             ev2.Published = now;
