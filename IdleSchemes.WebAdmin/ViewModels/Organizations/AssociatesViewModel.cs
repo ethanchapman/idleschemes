@@ -2,7 +2,7 @@
 using IdleSchemes.Data.Models.Organizations;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
     public class AssociatesViewModel : ListViewModel<Associate> {
 
         private readonly IdleDbContext _dbContext;

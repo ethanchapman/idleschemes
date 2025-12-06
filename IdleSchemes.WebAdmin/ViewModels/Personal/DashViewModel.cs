@@ -2,13 +2,13 @@
 using IdleSchemes.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
-    public class HomeViewModel : ViewModelBase {
+namespace IdleSchemes.WebAdmin.ViewModels.Personal {
+    public class DashViewModel : ViewModelBase {
 
         private readonly IdleDbContext _dbContext;
         private readonly TimeService _timeService;
 
-        public HomeViewModel(IdleDbContext dbContext, TimeService timeService) {
+        public DashViewModel(IdleDbContext dbContext, TimeService timeService) {
             _dbContext = dbContext;
             _timeService = timeService;
         }

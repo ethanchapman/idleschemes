@@ -4,7 +4,7 @@ using IdleSchemes.Data;
 using IdleSchemes.Data.Models.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
     public class EventsViewModel : ListViewModel<EventsViewModel.EventRow> {
 
         private readonly IdleDbContext _dbContext;

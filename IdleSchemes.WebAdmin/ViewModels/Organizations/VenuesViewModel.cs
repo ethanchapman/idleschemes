@@ -1,10 +1,8 @@
-﻿using IdleSchemes.Core.Helpers;
-using IdleSchemes.Data;
+﻿using IdleSchemes.Data;
 using IdleSchemes.Data.Models.Organizations;
 using Microsoft.EntityFrameworkCore;
-using static IdleSchemes.WebAdmin.ViewModels.PatronsViewModel;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
     public class VenuesViewModel : ListViewModel<Venue> {
 
         private readonly IdleDbContext _dbContext;

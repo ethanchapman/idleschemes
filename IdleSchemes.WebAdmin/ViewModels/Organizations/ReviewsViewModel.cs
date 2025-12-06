@@ -3,7 +3,7 @@ using IdleSchemes.Data;
 using IdleSchemes.Data.Models.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
     public class ReviewsViewModel : ListViewModel<ReviewsViewModel.ReviewRow> {
 
         private readonly IdleDbContext _dbContext;

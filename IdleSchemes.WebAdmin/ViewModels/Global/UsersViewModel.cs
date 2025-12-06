@@ -2,7 +2,7 @@
 using IdleSchemes.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Global {
     public class UsersViewModel : ListViewModel<User> {
 
         private readonly IdleDbContext _dbContext;

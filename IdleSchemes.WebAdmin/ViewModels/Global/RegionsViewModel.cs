@@ -3,7 +3,7 @@ using IdleSchemes.Data;
 using IdleSchemes.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdleSchemes.WebAdmin.ViewModels {
+namespace IdleSchemes.WebAdmin.ViewModels.Global {
     public class RegionsViewModel : ListViewModel<Region> {
 
         private readonly IdleDbContext _dbContext;
