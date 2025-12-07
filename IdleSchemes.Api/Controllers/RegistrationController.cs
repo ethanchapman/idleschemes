@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using IdleSchemes.Api.Models;
 using IdleSchemes.Api.Models.Input;
 using IdleSchemes.Core.Services;
@@ -207,6 +208,11 @@ namespace IdleSchemes.Api.Controllers {
                             ForName = seatReservation.ForName
                         }).Entity;
                         claim.Ticket.Registration = registration;
+                        result.Tickets.Add(new ReservationInfoModel.Ticket {
+                            Id = claim.Ticket.Id,
+                            Class = claim.Ticket.TicketClass.Name,
+                            Seat = claim.Ticket.Seat
+                        });
                     }
                 } else {
                     _logger.LogInformation("Invalid ticket reservation" +
