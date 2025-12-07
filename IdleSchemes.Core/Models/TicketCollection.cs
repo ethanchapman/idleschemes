@@ -34,21 +34,27 @@ namespace IdleSchemes.Core.Models {
             All = ticketClass.Tickets
                 .ToImmutableList();
             Confirmed = ticketClass.Tickets
-                .Where(t => t.Registration?.Confirmed is not null)
+                .Where(t => t.Registration?.Confirmed is not null
+                    && t.Registration?.Cancelled is null)
                 .ToImmutableList();
             Pending = ticketClass.Tickets
-                .Where(t => t.Registration?.TicketsClaimed is not null && t.Registration.TicketsClaimed > _timeoutLimit)
+                .Where(t => t.Registration?.Confirmed is null
+                    && t.Registration?.TicketsClaimed is not null 
+                    && t.Registration.TicketsClaimed > _timeoutLimit
+                    && t.Registration?.Cancelled is null)
+                .ToImmutableList();
+            Cancelled = ticketClass.Tickets
+                .Where(t => t.Registration?.Cancelled is not null)
                 .ToImmutableList();
             Available = ticketClass.Tickets
-                .Where(t => t.Registration?.Confirmed is null || t.Registration?.Cancelled is not null
-                    || t.Registration?.TicketsClaimed is null || t.Registration.TicketsClaimed < _timeoutLimit)
+                .Where(t => !Confirmed.Contains(t) && !Pending.Contains(t))
                 .ToImmutableList();
 
         }
 
         public TicketClass Class { get; }
 
-        public int? RemainingCount {
+        public int? ActualAvailableCount {
             get {
                 if (Class.DiscreteTickets) {
                     return Math.Min(Available.Count, Class.Limit ?? int.MaxValue);
@@ -60,6 +66,7 @@ namespace IdleSchemes.Core.Models {
         public ImmutableList<Ticket> All { get; } = ImmutableList<Ticket>.Empty;
         public ImmutableList<Ticket> Confirmed { get; } = ImmutableList<Ticket>.Empty;
         public ImmutableList<Ticket> Pending { get; } = ImmutableList<Ticket>.Empty;
+        public ImmutableList<Ticket> Cancelled { get; } = ImmutableList<Ticket>.Empty;
         public ImmutableList<Ticket> Available { get; } = ImmutableList<Ticket>.Empty;
 
     }

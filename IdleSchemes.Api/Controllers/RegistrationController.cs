@@ -143,10 +143,10 @@ namespace IdleSchemes.Api.Controllers {
                     return BadRequest();
                 }
 
-                if (ticketClass.RemainingCount is not null && ticketClass.RemainingCount < reservation.Count) {
+                if (ticketClass.ActualAvailableCount is not null && ticketClass.ActualAvailableCount < reservation.Count) {
                     _logger.LogInformation("Not enough tickets available for class" +
                         " ({Count}/{Remaining} Class {Class} Registration {RegistrationId} Event {EventId})",
-                        reservation.Count, ticketClass.RemainingCount, reservation.Class, registration.Id, registration.Instance.Id);
+                        reservation.Count, ticketClass.ActualAvailableCount, reservation.Class, registration.Id, registration.Instance.Id);
                     return BadRequest();
                 }
 

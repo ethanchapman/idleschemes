@@ -71,15 +71,26 @@ namespace IdleSchemes.Core.Services {
                     OrderSeq = i,
                     Limit = tc.Limit,
                     CanRegister = tc.CanRegister,
-                    DiscreteTickets = tc.Tickets.Any(),
+                    DiscreteTickets = tc.Tickets.Any() || (tc.Limit is not null && !tc.Tickets.Any()),
                     InviteCode = tc.RequiresCode ? _idService.GenerateSecret(8) : null
                 }).Entity;
+                if (tc.Tickets.Any()) {
+                    ticketClass.DiscreteTickets = true;
+                    _dbContext.Tickets.AddRange(tc.Tickets.Select(t => new Ticket {
+                        Id = _idService.GenerateId(),
+                        TicketClass = ticketClass,
+                        Seat = t.Seat,
+                        Price = ticketClass.Price + t.Price
+                    }));
+                } else if(tc.Limit is not null && !tc.Tickets.Any()) {
+                    ticketClass.DiscreteTickets = true;
+                    _dbContext.Tickets.AddRange(Enumerable.Range(0, tc.Limit.Value).Select(t => new Ticket {
+                        Id = _idService.GenerateId(),
+                        TicketClass = ticketClass,
+                        Price = ticketClass.Price
+                    }));
+                }
                 i++;
-                _dbContext.Tickets.AddRange(tc.Tickets.Select(t => new Ticket {
-                    Id = _idService.GenerateId(),
-                    TicketClass = ticketClass,
-                    Seat = t.Seat,
-                }));
             }
             return instance;
         }

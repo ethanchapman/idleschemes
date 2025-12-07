@@ -28,6 +28,7 @@ namespace IdleSchemes.Core.Services {
             var ticketClasses = await _dbContext.TicketClasses
                 .Include(tc => tc.Tickets)
                 .ThenInclude(t => t.Registration)
+                .Where(tc => tc.Instance == eventInstance)
                 .ToListAsync();
             return new TicketCollection(ticketClasses, timeoutLimit);
         }

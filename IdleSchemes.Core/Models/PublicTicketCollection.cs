@@ -5,9 +5,9 @@ namespace IdleSchemes.Core.Models {
     public class PublicTicketCollection {
         public PublicTicketCollection(TicketCollection ticketCollection) {
             Classes = ticketCollection.Classes
+                .OrderBy(c => c.Class.OrderSeq)
                 .Select(c => new PublicTicketClassCollection(c))
                 .ToImmutableList();
-            All = Classes.Sum(c => c.All);
             Confirmed = Classes.Sum(c => c.Confirmed);
             Pending = Classes.Sum(c => c.Pending);
             Available = Classes
@@ -16,7 +16,6 @@ namespace IdleSchemes.Core.Models {
         }
 
         public ImmutableList<PublicTicketClassCollection> Classes { get; }
-        public int All { get; }
         public int Confirmed { get; }
         public int Pending { get; }
         public ImmutableList<PublicAvailableTicket> Available { get; }
@@ -30,23 +29,23 @@ namespace IdleSchemes.Core.Models {
             Available = ticketClassCollection.Available
                 .Select(t => new PublicAvailableTicket(t))
                 .ToImmutableList();
+            ActualAvailableCount = ticketClassCollection.ActualAvailableCount;
+            if (ticketClassCollection.Class.DiscreteTickets) {
+                All = ticketClassCollection.Class.Limit ?? ticketClassCollection.All.Count;
+            } else {
+                All = ticketClassCollection.Class.Limit;
+            }
+            Confirmed = ticketClassCollection.Confirmed.Count;
+            Pending = ticketClassCollection.Pending.Count;
         }
 
         public PublicTicketClass Class { get; }
 
-        public int? RemainingCount {
-            get {
-                if (Class.DiscreteTickets) {
-                    return Math.Min(Available.Count, Class.Limit ?? int.MaxValue);
-                }
-                return Class.Limit;
-            }
-        }
-
-        public int All { get; }
+        public int? All { get; }
         public int Confirmed { get; }
         public int Pending { get; }
         public ImmutableList<PublicAvailableTicket> Available { get; }
+        public int? ActualAvailableCount { get; }
 
     }
 
