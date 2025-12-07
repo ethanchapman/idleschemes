@@ -12,7 +12,7 @@ namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
             _navigationManager = navigationManager;
         }
 
-        public string? ErrorMessage { get; set; } = null;
+        public string? ErrorMessage { get; private set; } = null;
         public EventTemplateCreationOptions Form { get; } = new EventTemplateCreationOptions();
         public bool HasIndividualTicketLimit { get; set; }
 

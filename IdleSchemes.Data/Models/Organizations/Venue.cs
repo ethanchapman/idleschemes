@@ -10,7 +10,8 @@ namespace IdleSchemes.Data.Models.Organizations {
         [Column("ParentId")]
         public Venue? Parent { get; set; }
         public string Name { get; set; } = "";
-        public string? PublicLocation { get; set; }
-        public string? PrivateLocation { get; set; }
+        public string PublicLocation { get; set; } = "";
+        public string PrivateLocation { get; set; } = "";
+        public string? TicketSchemes { get; set; }
     }
 }

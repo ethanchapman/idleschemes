@@ -1,0 +1,27 @@
+﻿@page "/org/venues/new"
+@inherits BaseAdminComponent<NewVenueViewModel>
+@layout MainLayout
+
+<PageTitle>New Venue</PageTitle>
+
+<div class="row">
+    <div class="col">
+        <form @onsubmit="ViewModel.SubmitAsync">
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <InputText class="form-control" @bind-Value="ViewModel.Venue!.Name" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Short Description</label>
+                <InputTextArea class="form-control" row="5" @bind-Value="ViewModel.Venue!.PublicLocation" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Short Description</label>
+                <InputTextArea class="form-control" row="5" @bind-Value="ViewModel.Venue!.PrivateLocation" />
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

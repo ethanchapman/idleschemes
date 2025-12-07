@@ -10,5 +10,6 @@ namespace IdleSchemes.Data.Models.Events {
         public required Organization Organization { get; init; }
         public EventInfo Info { get; init; } = new EventInfo();
         public bool IsUnique { get; set; } = true;
+        public string? TicketSchemes { get; set; }
     }
 }
