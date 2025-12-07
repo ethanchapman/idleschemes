@@ -3,12 +3,15 @@ using IdleSchemes.WebAdmin.Components;
 using IdleSchemes.WebAdmin.ViewModels;
 using IdleSchemes.Core;
 using IdleSchemes.Core.Helpers;
+using IdleSchemes.Core.Services;
+using IdleSchemes.WebAdmin.Services;
 
 namespace IdleSchemes.WebAdmin {
     public class Program {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
             Dependencies.Add(builder.Services);
+            builder.Services.AddScoped<INavigationManager, NavigationManagerImpl>();
             builder.Services.AddAll(Assembly.GetExecutingAssembly(), typeof(ViewModelBase), ServiceLifetime.Scoped);
 
             builder.Services.AddRazorComponents()

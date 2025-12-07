@@ -24,6 +24,7 @@ namespace IdleSchemes.Tests {
 
             ServiceCollection serviceCollection = new ServiceCollection();
             Dependencies.Add(serviceCollection);
+            serviceCollection.AddScoped<INavigationManager, MockNavigationManager>();
             serviceCollection.AddLogging(b => b.AddDebug());
             serviceCollection.AddSingleton<IConfiguration>(configuration);
             serviceCollection.AddScoped<TestSetupService>();

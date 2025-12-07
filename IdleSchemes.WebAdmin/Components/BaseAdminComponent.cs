@@ -10,7 +10,7 @@ namespace IdleSchemes.WebAdmin.Components {
         [Inject]
         protected IHttpContextAccessor IHttpContextAccessor { get; init; } = null!;
         [Inject]
-        protected NavigationManager NavigationManager { get; init; } = null!;
+        protected INavigationManager NavigationManager { get; init; } = null!;
         [Inject]
         protected TViewModel ViewModel { get; init; } = null!;
 

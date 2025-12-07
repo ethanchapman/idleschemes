@@ -2,12 +2,12 @@
 using IdleSchemes.Core.Services;
 
 namespace IdleSchemes.WebAdmin.ViewModels.Organizations {
-    public class NewTemplateViewModel : ViewModelBase {
+    public class NewVenueViewModel : ViewModelBase {
 
         private readonly EventFactoryService _eventFactoryService;
         private readonly INavigationManager _navigationManager;
 
-        public NewTemplateViewModel(EventFactoryService eventFactoryService, INavigationManager navigationManager) {
+        public NewVenueViewModel(EventFactoryService eventFactoryService, INavigationManager navigationManager) {
             _eventFactoryService = eventFactoryService;
             _navigationManager = navigationManager;
         }

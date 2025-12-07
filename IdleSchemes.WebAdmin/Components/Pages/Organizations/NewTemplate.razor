@@ -9,25 +9,24 @@
         <form @onsubmit="ViewModel.SubmitAsync">
             <div class="mb-3">
                 <label class="form-label">Name</label>
-                <InputText class="form-control" Value="@ViewModel.Form.Name" />
+                <InputText class="form-control" @bind-Value="ViewModel.Form.Name" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Short Description</label>
-                <InputTextArea class="form-control" row="5" Value="@ViewModel.Form.Name" />
+                <InputTextArea class="form-control" row="5" @bind-Value="ViewModel.Form.ShortDescription" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Long Description</label>
-                <InputTextArea class="form-control" row="8" Value="@ViewModel.Form.Name" />
+                <InputTextArea class="form-control" row="8" @bind-Value="ViewModel.Form.LongDescription" />
             </div>
             <div class="mb-3">
-                <label class="form-label">Short Description</label>
-                <InputNumber class="form-control" Value="@ViewModel.Form.Name" />
-            </div>
-            <div class="input-group mb-3">
-                <div class="input-group-text">
-                    <InputCheckbox class="form-check-input mt-0" type="checkbox" Value="@ViewModel.HasIndividualTicketLimit" />
+                <label class="form-label">Individual Ticket Limit</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-text">
+                        <InputCheckbox class="form-check-input mt-0" type="checkbox" @bind-Value="ViewModel.HasIndividualTicketLimit" />
+                    </div>
+                    <InputNumber type="text" class="form-control" @bind-Value="ViewModel.Form.IndividualTicketLimit" />
                 </div>
-                <InputNumber type="text" class="form-control" Value="@ViewModel.Form.IndividualTicketLimit" />
             </div>
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">Submit</button>

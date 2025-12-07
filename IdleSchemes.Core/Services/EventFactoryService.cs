@@ -17,12 +17,15 @@ namespace IdleSchemes.Core.Services {
             _timeService = timeService;
         }
 
-        public async Task<EventTemplate> CreateEventTemplateAsync(EventTemplateCreationOptions options) {
-            var template = await CreateTemplateAsync(options, true);
+        public async Task<EventTemplate> CreateEventTemplateAsync(EventTemplateCreationOptions options, bool save = false) {
+            var template = await CreateTemplateAsync(options, false);
+            if(save) {
+                await _dbContext.SaveChangesAsync();
+            }
             return template;
         }
 
-        public async Task<EventInstance> CreateEventAsync(EventCreationOptions options) {
+        public async Task<EventInstance> CreateEventAsync(EventCreationOptions options, bool save = false) {
             EventTemplate? template;
             if (options.TemplateId is not null) {
                 template = await _dbContext.EventTemplates
@@ -91,6 +94,9 @@ namespace IdleSchemes.Core.Services {
                     }));
                 }
                 i++;
+            }
+            if (save) {
+                await _dbContext.SaveChangesAsync();
             }
             return instance;
         }
